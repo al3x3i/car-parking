@@ -22,7 +22,6 @@ public class CarParkingService {
     @Autowired
     private ParkingSlotRepository parkingSlotRepository;
 
-
     public Optional<ParkingSlotEntity> addCarToParkingLot(ParkingSlotReservationRequestPayload payload) {
 
         Optional<ParkingFloorEntity> availableFloorForParking = findFreeParkingSlot(payload.getWeight(), payload.getHeight());
@@ -30,6 +29,10 @@ public class CarParkingService {
         return availableFloorForParking.map(
                 parkingFloor -> registerCarSlot(parkingFloor, payload.getWeight())
         );
+    }
+
+    public List<ParkingSlotEntity> findAllParkingCars() {
+        return parkingSlotRepository.findAll();
     }
 
     private ParkingSlotEntity registerCarSlot(ParkingFloorEntity parkingFloor, int carWeight) {

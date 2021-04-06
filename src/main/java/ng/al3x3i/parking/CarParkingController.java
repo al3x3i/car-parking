@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,6 +19,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/")
@@ -28,6 +30,21 @@ public class CarParkingController {
 
     @Autowired
     private CarParkingPaymentService carParkingPaymentService;
+
+    @GetMapping("parking")
+    public ResponseEntity getAllParkingCars() {
+        var allParkingCars = carParkingService.findAllParkingCars();
+
+        var carParkingSlots = allParkingCars.stream()
+                .map(carSlot -> ParkingSlotReservationResponsePayload.builder()
+                        .slotId(carSlot.getId())
+                        .slotNumber(carSlot.getSlotNumber())
+                        .floorNumber(carSlot.getFloorNumber())
+                        .isRegistered(true)
+                        .build()).collect(Collectors.toList());
+
+        return ResponseEntity.ok(carParkingSlots);
+    }
 
     @PostMapping("parking")
     public ResponseEntity parkCar(@RequestBody @Valid ParkingSlotReservationRequestPayload payload) {

@@ -10,7 +10,7 @@ Spring boot application to simulate autonomous parking process
 ```
 ./gradlew bootRun
 ```
-4. The application has two endpoints:
+4. The application has three endpoints:
 4.1 Assign car to parking slot
 ```
 curl --location --request POST 'http://localhost:8080/parking' \
@@ -24,6 +24,11 @@ curl --location --request POST 'http://localhost:8080/parking' \
 ```
 curl --location -g --request POST 'http://localhost:8080/parking/{slotId}/create-invoice'
 ```
+4.3 Get all assigned parking slots:
+```
+curl --location --request GET 'http://localhost:8080/parking/'
+```
+
 
 
 
